@@ -3,6 +3,7 @@ package com.inf2007.lab01
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,6 +27,10 @@ import com.inf2007.lab01.ui.theme.Lab01Theme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
+        enableEdgeToEdge()
+
         setContent {
             MainScreen()
         }
@@ -46,14 +51,20 @@ fun MainScreen() {
                     .padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
+                // Reset showGreeting to false whenever username changes
                 UserInput(
                     name = username,
-                    onNameChange = { username = it }
+                    onNameChange = {
+                        username = it
+                        showGreeting = false
+                    }
                 )
 
                 Button(
                     onClick = {
-                        showGreeting = username.isNotBlank()
+                        if (username.isNotBlank()) {
+                            showGreeting = true
+                        }
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -74,6 +85,7 @@ fun MainScreen() {
         }
     }
 }
+
 
 @Composable
 fun UserInput(name: String, onNameChange: (String) -> Unit, modifier: Modifier = Modifier) {
